@@ -1,11 +1,10 @@
 {
   "name" : "leaps/httpclient",
   "description" : "Leaps Httpclient library",
-  "version" : "1.2.3",
+  "version" : "1.2.4",
   "require" : {
     "php" : ">=5.4.0",
-    "ext-mbstring" : "*",
-    "lib-pcre" : "*"
+    "ext-curl" : "*"
   },
   "authors" : [ {
     "name" : "Tongle Xu",
