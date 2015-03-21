@@ -1,21 +1,13 @@
 <?php
-/*
- +------------------------------------------------------------------------+
- | Leaps Framework                                                        |
- +------------------------------------------------------------------------+
- | Copyright (c) 2011-2014 Leaps Team (http://www.tintsoft.com)           |
- +------------------------------------------------------------------------+
- | This source file is subject to the Apache License that is bundled      |
- | with this package in the file docs/LICENSE.txt.                        |
- |                                                                        |
- | If you did not receive a copy of the license and are unable to         |
- | obtain it through the world-wide-web, please send an email             |
- | to license@tintsoft.com so we can send you a copy immediately.         |
- +------------------------------------------------------------------------+
- | Authors: XuTongle <xutongle@gmail.com>                                 |
- +------------------------------------------------------------------------+
- */
-
+// +----------------------------------------------------------------------
+// | Leaps Framework [ WE CAN DO IT JUST THINK IT ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2011-2014 Leaps Team (http://www.tintsoft.com)
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author XuTongle <xutongle@gmail.com>
+// +----------------------------------------------------------------------
 namespace Leaps\HttpClient;
 
 class Result {
@@ -23,7 +15,6 @@ class Result {
 	protected $httpCode = 0;
 	protected $headers = [ ];
 	protected $cookies = [ ];
-	protected $contentType;
 	protected $time = 0;
 
 	/**
@@ -51,13 +42,6 @@ class Result {
 						}
 					} else {
 						$this->headers [$m [1]] = $m [2];
-					}
-					if ($m [1] == 'Content-Type') {
-						if (preg_match ( '#^([a-zA-Z0-9\/.]+); charset\=(.*)$#', $m [2], $m2 )) {
-							$this->contentType = MimeType::getSuffix($m2[1]);
-						}else if (preg_match ( '#^([a-zA-Z0-9\/.]+)$#', $m [2], $m2 )) {
-							$this->contentType = MimeType::getSuffix($m2[1]);
-						}
 					}
 				}
 			}
@@ -96,13 +80,6 @@ class Result {
 	}
 
 	/**
-	 * 获取响应的文档类型
-	 */
-	public function getContentType(){
-		return $this->contentType;
-	}
-
-	/**
 	 * 获取Cookie内容
 	 *
 	 * @param string $key
@@ -132,12 +109,5 @@ class Result {
 	 */
 	public function __toString() {
 		return ( string ) $this->getBody ();
-	}
-
-	/**
-	 * 输出数组
-	 */
-	public function toArray(){
-		return get_object_vars($this);
 	}
 }
