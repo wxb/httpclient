@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace Leaps\HttpClient;
 
-abstract class Adapter extends \Leaps\Base
+abstract class Adapter
 {
 	/**
 	 * 响应数据寄存器
