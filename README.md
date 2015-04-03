@@ -24,7 +24,7 @@ echo $result->getBody();
 <?php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$result = $HttpClient->get([]'http://www.baidu.com/','http://www.qq.com']);
+$result = $HttpClient->get(['http://www.baidu.com/','http://www.qq.com']);
 echo $result->getBody();
 ```
 
