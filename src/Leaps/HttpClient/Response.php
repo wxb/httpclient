@@ -48,6 +48,13 @@ class Response
 	protected $contentType;
 
 	/**
+	 * 响应的内容编码
+	 *
+	 * @var string
+	 */
+	protected $charset;
+
+	/**
 	 * Cookie集合
 	 *
 	 * @var array
@@ -96,8 +103,12 @@ class Response
 						if ($key == 'Content-Type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
 								$this->contentType = substr ( $value, 0, $pos );
+								$this->charset = substr ( $value, $pos + 9 );
 							} else {
 								$this->contentType = $value;
+								if (preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
+									$this->charset = strtolower ( $match [1] );
+								}
 							}
 						}
 					}
@@ -317,17 +328,17 @@ class Response
 	{
 		$result = [ ];
 		if (is_string ( $this->content ) && ! empty ( $this->content )) {
-			if (preg_match ( "#<head>(.*)</head>#si", $this->content, $head )) {
+			if (preg_match ( "/<head>(.*)<\/head>/si", $this->content, $head )) {
 				// 解析title
 				if (preg_match ( '/<title>([^>]*)<\/title>/si', $head [1], $match )) {
-					$result ['title'] = strip_tags ( $match [1] );
+					$result ['title'] = trim ( strip_tags ( $match [1] ) );
 				}
 				// 解析meta
 				if (preg_match_all ( '/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $head [1], $match )) {
 					// name转小写
 					$names = array_map ( 'strtolower', $match [1] );
 					$values = $match [2];
-					$limiti = count ($names);
+					$limiti = count ( $names );
 					for($i = 0; $i < $limiti; $i ++) {
 						$result ['metaTags'] [$names [$i]] = $values [$i];
 					}
