@@ -87,7 +87,6 @@ class Response
 		if (isset ( $response ['rawHeader'] )) {
 			$this->rawHeaders = $response ['rawHeader'];
 		}
-
 		if (isset ( $response ['header'] ) && is_array ( $response ['header'] )) {
 			foreach ( $response ['header'] as $item ) {
 				if (empty ( $item ))
@@ -103,7 +102,7 @@ class Response
 						if ($key == 'Content-Type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
 								$this->contentType = substr ( $value, 0, $pos );
-								$this->charset = substr ( $value, $pos + 9 );
+								$this->charset = strtolower ( substr ( $value, $pos + 9 ) );
 							} else {
 								$this->contentType = $value;
 								if (preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
@@ -326,7 +325,7 @@ class Response
 	 *
 	 * @return string
 	 */
-	public function getContent($format = true)
+	public function getContent($isUtf8 = false)
 	{
 		return $this->content;
 	}
