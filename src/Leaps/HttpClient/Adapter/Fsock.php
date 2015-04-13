@@ -365,6 +365,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 			$rs = [
 					'code' => $code,
 					'data' => $body,
+					'rawHeader'=>$header,
 					'header' => $headerArr,
 					'time' => $time
 			];

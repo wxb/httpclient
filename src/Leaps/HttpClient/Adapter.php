@@ -230,13 +230,13 @@ abstract class Adapter
 			// 如果是多个URL
 			$result = [ ];
 			foreach ( $data as $key => $item ) {
-				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 				$result [$key] = $reflection->newInstanceArgs ( [
 						$item
 				] );
 			}
 		} else {
-			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
 					$data
 			] );
@@ -259,13 +259,13 @@ abstract class Adapter
 			// 如果是多个URL
 			$result = [ ];
 			foreach ( $data as $key => $item ) {
-				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 				$result [$key] = $reflection->newInstanceArgs ( [
 						$item
 				] );
 			}
 		} else {
-			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
 					$data
 			] );
@@ -288,13 +288,13 @@ abstract class Adapter
 			// 如果是多个URL
 			$result = [ ];
 			foreach ( $data as $key => $item ) {
-				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 				$result [$key] = $reflection->newInstanceArgs ( [
 						$item
 				] );
 			}
 		} else {
-			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
 					$data
 			] );
@@ -318,14 +318,14 @@ abstract class Adapter
 			// 如果是多个URL
 			$result = [ ];
 			foreach ( $data as $key => $item ) {
-				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+				$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 				$result [$key] = $reflection->newInstanceArgs ( [
 						$item
 				] );
 			}
 		} else {
 
-			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Result" );
+			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
 					$data
 			] );

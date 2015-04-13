@@ -196,6 +196,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_HEADER, true );
+		// 抓取跳转后的页面
 		curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, true );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt ( $ch, CURLOPT_ENCODING, 'gzip' );
@@ -222,7 +223,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		} elseif (array_key_exists ( 'HTTP_USER_AGENT', $_SERVER )) {
 			curl_setopt ( $ch, CURLOPT_USERAGENT, $_SERVER ['HTTP_USER_AGENT'] );
 		} else {
-			curl_setopt ( $ch, CURLOPT_USERAGENT, "PHP/" . PHP_VERSION . " HttpClient/1.0" );
+			curl_setopt ( $ch, CURLOPT_USERAGENT, "PHP/" . PHP_VERSION . " HttpClient/1.2.5" );
 		}
 		foreach ( $this->option as $k => $v ) {
 			curl_setopt ( $ch, $k, $v );
@@ -350,7 +351,8 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		$headerSize = curl_getinfo ( $ch, CURLINFO_HEADER_SIZE );
 		$result ['code'] = curl_getinfo ( $ch, CURLINFO_HTTP_CODE );
 		$result ['data'] = substr ( $data, $headerSize );
-		$result ['header'] = explode ( "\r\n", substr ( $data, 0, $headerSize ) );
+		$result ['rawHeader'] = substr ( $data, 0, $headerSize );
+		$result ['header'] = explode ( "\r\n", $result ['rawHeader'] );
 		$result ['time'] = curl_getinfo ( $ch, CURLINFO_TOTAL_TIME );
 		return $result;
 	}
