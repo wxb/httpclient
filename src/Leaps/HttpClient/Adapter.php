@@ -220,7 +220,7 @@ abstract class Adapter
 	 * HTTP GET方式请求
 	 *
 	 * @param string $url
-	 * @return \Leaps\HttpClient\Result
+	 * @return \Leaps\HttpClient\Response
 	 */
 	public function get($url)
 	{
@@ -249,7 +249,7 @@ abstract class Adapter
 	 *
 	 * @param string $url
 	 * @param string $data
-	 * @return \Leaps\HttpClient\Result
+	 * @return \Leaps\HttpClient\Response
 	 */
 	public function post($url, $datas)
 	{
@@ -278,7 +278,7 @@ abstract class Adapter
 	 *
 	 * @param string $url
 	 * @param string、array $data
-	 * @return \Leaps\HttpClient\Result
+	 * @return \Leaps\HttpClient\Response
 	 */
 	public function put($url, $datas)
 	{
@@ -308,7 +308,7 @@ abstract class Adapter
 	 * @param $url
 	 * @param $data
 	 * @param $timeout
-	 * @return \Leaps\HttpClient\Result
+	 * @return \Leaps\HttpClient\Response
 	 */
 	public function delete($url)
 	{

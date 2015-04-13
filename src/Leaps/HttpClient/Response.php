@@ -123,7 +123,7 @@ class Response
 	 */
 	public function getContentSuffix()
 	{
-		return  MimeType::getSuffix($this->contentType);
+		return MimeType::getSuffix ( $this->contentType );
 	}
 
 	/**
@@ -308,6 +308,33 @@ class Response
 	public function getContent($format = true)
 	{
 		return $this->content;
+	}
+
+	/**
+	 * 提取所有的 Head 标签返回一个数组
+	 */
+	public function getHeadTags()
+	{
+		$result = [ ];
+		if (is_string ( $this->content ) && ! empty ( $this->content )) {
+			if (preg_match ( "#<head>(.*)</head>#si", $this->content, $head )) {
+				// 解析title
+				if (preg_match ( '/<title>([^>]*)<\/title>/si', $head [1], $match )) {
+					$result ['title'] = strip_tags ( $match [1] );
+				}
+				// 解析meta
+				if (preg_match_all ( '/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $head [1], $match )) {
+					// name转小写
+					$names = array_map ( 'strtolower', $match [1] );
+					$values = $match [2];
+					$limiti = count ($names);
+					for($i = 0; $i < $limiti; $i ++) {
+						$result ['metaTags'] [$names [$i]] = $values [$i];
+					}
+				}
+			}
+		}
+		return $result;
 	}
 
 	/**
