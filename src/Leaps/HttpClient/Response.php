@@ -142,7 +142,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsInvalid()
+	public function isInvalid()
 	{
 		return $this->getStatusCode () < 100 || $this->getStatusCode () >= 600;
 	}
@@ -152,7 +152,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsSuccessful()
+	public function isSuccessful()
 	{
 		return $this->getStatusCode () >= 200 && $this->getStatusCode () < 300;
 	}
@@ -162,7 +162,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsRedirection()
+	public function isRedirection()
 	{
 		return $this->getStatusCode () >= 300 && $this->getStatusCode () < 400;
 	}
@@ -172,7 +172,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsClientError()
+	public function isClientError()
 	{
 		return $this->getStatusCode () >= 400 && $this->getStatusCode () < 500;
 	}
@@ -182,7 +182,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsServerError()
+	public function isServerError()
 	{
 		return $this->getStatusCode () >= 500 && $this->getStatusCode () < 600;
 	}
@@ -192,7 +192,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsOk()
+	public function isOk()
 	{
 		return $this->getStatusCode () == 200;
 	}
@@ -202,7 +202,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsForbidden()
+	public function isForbidden()
 	{
 		return $this->getStatusCode () == 403;
 	}
@@ -212,7 +212,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsNotFound()
+	public function isNotFound()
 	{
 		return $this->getStatusCode () == 404;
 	}
@@ -222,7 +222,7 @@ class Response
 	 *
 	 * @return boolean
 	 */
-	public function getIsEmpty()
+	public function isEmpty()
 	{
 		return in_array ( $this->getStatusCode (), [
 				201,
