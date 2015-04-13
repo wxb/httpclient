@@ -130,6 +130,16 @@ class Response
 	}
 
 	/**
+	 * 获取结果编码
+	 *
+	 * @return string
+	 */
+	public function getCharSet()
+	{
+		return $this->charset;
+	}
+
+	/**
 	 * 获取内容后缀
 	 */
 	public function getContentSuffix()
