@@ -94,8 +94,16 @@ echo $response->getContent();
 
 ###设置并发请求时最大列队数量，系统默认为100。
 
-HttpClient是支持并发请求的，详细可查看下面的get()方法。如果同时请求一个服务器，在一瞬间会对被请求服务器造成巨大压力，也会对本服务器增加网络IO压力，所以这个参数可以控制同时并发的数量上限，当达到上限后，列队将等待执行完毕一个追加一个插入列队。
+HttpClient是支持并发请求的，详细可查看下面的get()方法。如果同时请求一个服务器，在一瞬间会对被请求服务器造成巨大压力，也会对本服务器增加网络IO压力，
+所以这个参数可以控制同时并发的数量上限，当达到上限后，列队将等待执行完毕一个追加一个插入列队。
 
+```php
+//Create an instance
+$HttpClient = new \Leaps\HttpClient\Adapter\Curl();
+$HttpClientt->setMultiMaxNum(100);
+$response = $HttpClient->get(['http://www.baidu.com/']);
+echo $response->getContent();
+```
 
 ###设置其它参数
 
