@@ -98,7 +98,6 @@ class Response
 						$cookie = $this->resolveCookie ( $value );
 						$this->cookies [$cookie ['name']] = $cookie ['value'];
 					} else {
-						$this->headers [$key] = $value;
 						if ($key == 'Content-Type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
 								$this->contentType = substr ( $value, 0, $pos );
@@ -110,6 +109,7 @@ class Response
 								}
 							}
 						}
+						$this->headers [$key] = $value;
 					}
 				} else {
 					$this->headers [] = $item;
