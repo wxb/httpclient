@@ -28,20 +28,20 @@ $response = $HttpClient->get(['http://www.baidu.com/','http://www.qq.com']);
 echo $response->getContent();
 ```
 
-###setAgent($agent = null)
+###设置User Agent
+默认情况下，如果是WEB形式使用的本组件，那么UserAgent是取的用户浏览器的，在cli模式下这个值是PHP版本号。
 
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClient->setAgent('test')；
+$HttpClient->setUserAgent('test')；
 $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
 
-###setCookies($cookie)
+###设置cookie内容，$cookie为字符串，多个cookie请用;隔开
 
-设置cookie内容，$cookie为字符串，多个cookie请用;隔开
 
 ```php
 //Create an instance
@@ -51,21 +51,17 @@ $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
-###setProxy($host,$port)
-
-设置代理服务器地址
+###设置代理服务器地址
 
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClient->setProxy('username','password');
+$HttpClient->setHttpProxy('host','port');
 $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
-###setAuthorization($username,$password)
-
-设置基本认证的用户名和密码
+###设置基本认证的用户名和密码
 
 ```php
 //Create an instance
@@ -75,9 +71,7 @@ $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
-###setReferer($referer)
-
-设置引用页
+###设置引用页
 
 ```php
 //Create an instance
@@ -87,9 +81,7 @@ $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
-###setHostIp($ip)
-
-设置请求的服务器的IP，这样可避免请求域名时DNS解析
+###设置请求的服务器的IP，这样可避免请求域名时DNS解析
 
 ```php
 //Create an instance
@@ -100,15 +92,14 @@ $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
-###setMultiMaxNum($num)
+###设置并发请求时最大列队数量，系统默认为100。
 
-设置并发请求时最大列队数量，系统默认为100。
 HttpClient是支持并发请求的，详细可查看下面的get()方法。如果同时请求一个服务器，在一瞬间会对被请求服务器造成巨大压力，也会对本服务器增加网络IO压力，所以这个参数可以控制同时并发的数量上限，当达到上限后，列队将等待执行完毕一个追加一个插入列队。
 
 
-###setOption($key, $value)
+###设置其它参数
 
-设置其它参数用以弥补HttpClient类中不存在的方法，具体请看具体驱动的方法，比如采用CURL的话，其实就相当于CURL的setOption()方法
+用以弥补HttpClient类中不存在的方法，具体请看具体驱动的方法，比如采用CURL的话，其实就相当于CURL的setOption()方法
 
 ```php
 //Create an instance
