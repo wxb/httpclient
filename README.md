@@ -193,7 +193,7 @@ echo $response->getHeaders();
 echo $response->getHeader($name);
 
 //获取解析过的Cookie集合，数组形式
-echo $response->getCookies()();
+echo $response->getCookies();
 
 //获取指定的Cookie值
 echo $response->getCookie($name);
