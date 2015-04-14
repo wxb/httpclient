@@ -198,7 +198,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		// 抓取跳转后的页面
 		curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, true );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt ( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
+		curl_setopt ( $ch, CURLOPT_ENCODING, 'gzip, deflate' );
 		curl_setopt ( $ch, CURLOPT_TIMEOUT, $this->timeout );
 		curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT_MS, $this->connectTimeout );
 		if (! is_null ( $this->authorizationToken )) { // 认证
