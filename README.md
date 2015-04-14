@@ -167,7 +167,6 @@ print_r($HttpClient->post($urls,$vars));
 
 ###高级响应（Response）
 
-关于返回，正常情况下返回的是
 ```php
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $response = $HttpClient->get('http://www.baidu.com/');
