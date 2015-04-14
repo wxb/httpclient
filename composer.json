@@ -19,9 +19,6 @@
     "source" : "https://github.com/tintsoft/leaps"
   },
   "autoload" : {
-  	"classmap": [
-  	  "src/Leaps/HttpClient.php"
-  	],
     "psr-4" : {
       "Leaps\\HttpClient\\" : "src/Leaps/HttpClient/"
     }
