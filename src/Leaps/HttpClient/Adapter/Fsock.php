@@ -60,18 +60,14 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 	{
 		if (is_array ( $url )) {
 			$data = $this->requestUrl ( $url );
+			$this->reset ();
 		} else {
 			$data = $this->requestUrl ( [
 					$url
 			] );
+			$this->reset ();
 		}
-		$this->reset ();
-		if (! is_array ( $url )) {
-			$this->httpData = $this->httpData [$url];
-			return $data [$url];
-		} else {
-			return $data;
-		}
+		return $data;
 	}
 
 	/**
@@ -92,27 +88,27 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		// POST模式
 		$this->setMethod ( 'POST' );
 		if (is_array ( $url )) {
-			$myvars = [ ];
+			$myVars = [ ];
 			foreach ( $url as $k => $u ) {
 				if (isset ( $vars [$k] )) {
 					if (is_array ( $vars [$k] )) {
 						if ($this->files) {
 							// 如果需要上传文件，则不需要预先将数组转换成字符串
-							$my_vars [$u] = $vars [$k];
+							$myVars [$u] = $vars [$k];
 						} else {
-							$myvars [$u] = http_build_query ( $vars [$k] );
+							$myVars [$u] = http_build_query ( $vars [$k] );
 						}
 					} else {
-						$myvars [$u] = $vars [$k];
+						$myVars [$u] = $vars [$k];
 					}
 				}
 			}
 		} else {
-			$myvars = array (
+			$myVars = [
 					$url => $vars
-			);
+			];
 		}
-		$this->postData = $myvars;
+		$this->postData = $myVars;
 		return $this->getRequest ( $url );
 	}
 
@@ -243,10 +239,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		$header ['Content-Length'] = strlen ( $vars );
 		$str = $this->method . ' ' . $uri . ' HTTP/1.1' . "\r\n";
 		foreach ( $header as $k => $v ) {
-			$str .= $k . ': ' . str_replace ( array (
-					"\r",
-					"\n"
-			), '', $v ) . "\r\n";
+			$str .= $k . ': ' . str_replace ( ["\r",	"\n"], '', $v ) . "\r\n";
 		}
 		$str .= "\r\n";
 		if ($this->timeout > ini_get ( 'max_execution_time' ))

@@ -71,17 +71,15 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		}
 		if (is_array ( $url )) {
 			$data = $this->requestUrl ( $url );
+			$this->reset ();
+			return $data;
 		} else {
 			$data = $this->requestUrl ( [
 					$url
 			] );
-		}
-		$this->reset ();
-		if (! is_array ( $url )) {
-			$this->httpData = $this->httpData [$url];
-			return $data [$url];
-		} else {
-			return $data;
+			$this->reset ();
+			// $this->httpData = $this->httpData [$url];
+			return $data;// [$url];
 		}
 	}
 
@@ -100,16 +98,16 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 	{
 		// POST模式
 		$this->setMethod ( 'POST' );
-		$this->setOption ( CURLOPT_HTTPHEADER, array (
+		$this->setOption ( CURLOPT_HTTPHEADER, [
 				'Expect:'
-		) );
+		] );
 		if (is_array ( $url )) {
 			$myvars = [ ];
 			foreach ( $url as $k => $u ) {
 				if (isset ( $vars [$k] )) {
 					if (is_array ( $vars [$k] )) {
 						if ($this->files) {
-							$myvars [$u] = $vars [$k] + $this->files;
+							$myvars [$u] = array_merge ( $vars [$k], $this->files );
 						} else {
 							$myvars [$u] = http_build_query ( $vars [$k] );
 						}
@@ -117,7 +115,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 						if ($this->files) {
 							// 把字符串解析成数组
 							parse_str ( $vars [$k], $tmp );
-							$myvars [$u] = $tmp + $this->files;
+							$myvars [$u] = array_merge ( $tmp, $this->files );
 						} else {
 							$myvars [$u] = $vars [$k];
 						}
@@ -125,6 +123,9 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 				}
 			}
 		} else {
+			if ($this->files) {
+				$vars = array_merge ( $vars, $this->files );
+			}
 			$myvars = [
 					$url => $vars
 			];

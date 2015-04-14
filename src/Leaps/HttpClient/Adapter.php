@@ -238,7 +238,7 @@ abstract class Adapter
 		} else {
 			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
-					$data
+					$data [$url]
 			] );
 		}
 		return $result;
@@ -267,7 +267,7 @@ abstract class Adapter
 		} else {
 			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
-					$data
+					$data [$url]
 			] );
 		}
 		return $result;
@@ -296,7 +296,7 @@ abstract class Adapter
 		} else {
 			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
-					$data
+					$data [$url]
 			] );
 		}
 		return $result;
@@ -327,7 +327,7 @@ abstract class Adapter
 
 			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
-					$data
+					$data [$url]
 			] );
 		}
 		return $result;
@@ -347,9 +347,9 @@ abstract class Adapter
 	 * @param int $timeout
 	 * @return Result
 	 */
-	public function upload($url, $fileName, $name = "upload", $post = null, $timeout = 30)
+	public function upload($url, $fileName, $name = "upload", $post = null)
 	{
-		return $this->addFile ( $fileName, $name )->post ( $url, $post, $timeout );
+		return $this->addFile ( $fileName, $name )->post ( $url, $post );
 	}
 
 	/**
@@ -364,6 +364,7 @@ abstract class Adapter
 	public function addFile($fileName, $name = "upload")
 	{
 		$this->_addFile ( $fileName, $name ? $name : "upload" );
+		return $this;
 	}
 	abstract public function setAuthorization($username, $password);
 	abstract public function getRequest($url);
