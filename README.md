@@ -3,7 +3,7 @@
 ```json
 "require" : {
     "php" : ">=5.4.0",
-    "leaps/httpclient": "1.3.2"
+    "leaps/httpclient": "1.3.3"
 }
 ```
 ###基本使用
@@ -18,7 +18,7 @@ $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
-也可以使用批量获取不通的网页内容：
+也可以使用批量获取不同的网页内容：
 
 ```php
 <?php
@@ -172,46 +172,67 @@ print_r($HttpClient->post($urls,$vars));
 ```php
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $response = $HttpClient->get('http://www.baidu.com/');
+
 //获取响应的文档类型
 echo $response->getContentType();
+
 //获取响应的文档编码(当响应头和返回的HTML文档中没有编码信息时该方法获取不到正确的编码)
 echo $response->getCharSet();
+
 //获取响应的文档后缀名，(根据响应的文档类型来匹配后缀名，方便在下载文档后另存)
 echo $response->getContentSuffix();
+
 //获取响应的状态码（如200）
 echo $response->getStatusCode();
+
 //获取原始的响应头
 echo $response->getRawHeader();
+
 //获取解析过的响应头Key->value形式
 echo $response->getHeaders();
+
 //获取指定响应头
 echo $response->getHeader($name);
+
 //获取解析过的Cookie集合，数组形式
 echo $response->getCookies()();
+
 //获取指定的Cookie值
 echo $response->getCookie($name);
+
 //获取本次请求消耗的时间
 echo $response->getTime()
+
 //获取响应的内容
 echo $response->getContent();
+
 //获取HTML文档Head中的title和meta标签数组
 echo $response->getHeadTags();
+
 //是否是有效的HTTP响应码
 echo $response->isInvalid();
+
 //是否是成功的响应（响应码为200-300之间视为成功）
 echo $response->isSuccessful();
+
 //是否是重定向响应(300-400)
 echo $response->isRedirection();
+
 //是否是客户端错误的响应(400-500)
 echo $response->isClientError();
+
 //是否是服务端错误的响应（500-600）
 echo $response->isServerError();
+
 //是否是200
 echo $response->isOk();
+
 //是否是403
 echo $response->isForbidden();
+
 //是否是404
 echo $response->isNotFound();
+
 //是否是201,04,304
 echo $response->isEmpty();
 ```
