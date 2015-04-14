@@ -251,7 +251,7 @@ abstract class Adapter
 	 * @param string $data
 	 * @return \Leaps\HttpClient\Response
 	 */
-	public function post($url, $datas)
+	public function post($url, $datas = [])
 	{
 		$this->postRequest ( $url, $datas );
 		$data = $this->getResutData ();
@@ -338,32 +338,31 @@ abstract class Adapter
 	 *
 	 * 注意，使用 `addFile()` 上传文件时，必须使用post方式提交
 	 *
-	 * upload('http://localhost/upload', '/tmp/test.jpg');
+	 * upload('http://localhost/upload', 'pic','/tmp/test.jpg');
 	 *
 	 * @param $url
 	 * @param $name string 上传的文件的key，默认为 `file`
-	 * @param $file_name string
+	 * @param $fileName string
 	 * @param null $post
-	 * @param int $timeout
 	 * @return Result
 	 */
-	public function upload($url, $fileName, $name = "upload", $post = null)
+	public function upload($url, $name, $fileName, $post = [])
 	{
-		return $this->addFile ( $fileName, $name )->post ( $url, $post );
+		return $this->addFile ( $name, $fileName )->post ( $url, $post );
 	}
 
 	/**
 	 * 添加上传文件
 	 *
-	 * HttpClient::factory()->add_file('/tmp/test.jpg', 'img');
+	 * HttpClient::factory()->addFile('img','/tmp/test.jpg');
 	 *
 	 * @param $file_name string 文件路径
 	 * @param $name string 名称
 	 * @return $this
 	 */
-	public function addFile($fileName, $name = "upload")
+	public function addFile($name, $fileName, $mimeType = '')
 	{
-		$this->_addFile ( $fileName, $name ? $name : "upload" );
+		$this->_addFile ( $name, $fileName, $mimeType );
 		return $this;
 	}
 	abstract public function setAuthorization($username, $password);

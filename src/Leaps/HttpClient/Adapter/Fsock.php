@@ -44,7 +44,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 	 * @param $name string 文件名
 	 * @return $this
 	 */
-	public function _addFile($fileName, $name)
+	public function _addFile($name, $fileName, $mimeType = '')
 	{
 		$this->files [$name] = $fileName;
 		return $this;
@@ -170,11 +170,11 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		$matches = parse_url ( $url );
 		$hostname = $matches ['host'];
 		$uri = isset ( $matches ['path'] ) ? $matches ['path'] . (isset ( $matches ['query'] ) ? '?' . $matches ['query'] : '') : '/';
-		$port = isset ( $matches ['port'] ) ? intval ( $matches ['port'] ) : ($matches ['scheme'] == 'https' ? 443 : 80);
+		$connPort = isset ( $matches ['port'] ) ? intval ( $matches ['port'] ) : ($matches ['scheme'] == 'https' ? 443 : 80);
 		if ($matches ['scheme'] == 'https') {
-			$host = $this->hostIp ? 'tls://' . $this->hostIp : 'tls://' . $hostname;
+			$connHost = $this->_ip ? 'tls://' . $this->_ip : 'tls://' . $hostname;
 		} else {
-			$host = $this->hostIp ? $this->hostIp : $hostname;
+			$connHost = $this->_ip ? $this->_ip : $hostname;
 		}
 
 		$header = [
@@ -182,6 +182,10 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 				'Connection' => 'Close'
 		];
+		if (! is_null ( $this->authorizationToken )) { // 认证
+			$header ['Authorization'] = $this->authorizationToken;
+		}
+
 		if ($this->userAgent) {
 			$header ['User-Agent'] = $this->userAgent;
 		} elseif (array_key_exists ( 'HTTP_USER_AGENT', $_SERVER )) {
@@ -237,14 +241,23 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		}
 		// 设置长度
 		$header ['Content-Length'] = strlen ( $vars );
-		$str = $this->method . ' ' . $uri . ' HTTP/1.1' . "\r\n";
+		if (! is_null ( $this->proxyHost ) && ! is_null ( $this->proxyPort )) {
+			$connHost = $this->proxyHost;
+			$connPort = $this->proxyPort;
+			$str = $this->_method . ' ' . $url . ' HTTP/1.1' . "\r\n";
+		} else {
+			$str = $this->_method . ' ' . $uri . ' HTTP/1.1' . "\r\n";
+		}
 		foreach ( $header as $k => $v ) {
-			$str .= $k . ': ' . str_replace ( ["\r",	"\n"], '', $v ) . "\r\n";
+			$str .= $k . ': ' . str_replace ( [
+					"\r",
+					"\n"
+			], '', $v ) . "\r\n";
 		}
 		$str .= "\r\n";
 		if ($this->timeout > ini_get ( 'max_execution_time' ))
 			@set_time_limit ( $this->timeout );
-		$ch = @fsockopen ( $host, $port, $errno, $errstr, $this->timeout );
+		$ch = @fsockopen ( $connHost, $connPort, $errno, $errstr, $this->_timeout );
 		if (! $ch) {
 			// \Leaps\Debug::error ( "$errstr ($errno)" );
 			return false;
@@ -358,7 +371,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 			$rs = [
 					'code' => $code,
 					'data' => $body,
-					'rawHeader'=>$header,
+					'rawHeader' => $header,
 					'header' => $headerArr,
 					'time' => $time
 			];

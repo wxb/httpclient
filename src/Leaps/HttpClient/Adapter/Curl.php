@@ -10,6 +10,8 @@
 // +----------------------------------------------------------------------
 namespace Leaps\HttpClient\Adapter;
 
+use Leaps\HttpClient\MimeType;
+
 class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\AdapterInterface
 {
 
@@ -48,9 +50,9 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 	 * @param $name string 文件名
 	 * @return $this
 	 */
-	public function _addFile($fileName, $name)
+	public function _addFile($name, $fileName = '', $mimeType = '')
 	{
-		$this->files [$name] = '@' . $fileName;
+		$this->files [$name] = "@" . realpath ( $fileName ) . ";filename=" . rawurlencode ( basename ( $fileName ) ) . ($mimeType ? $mimeType : ";type=" . MimeType::getMimeType ( $fileName ));
 		return $this;
 	}
 
@@ -78,8 +80,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 					$url
 			] );
 			$this->reset ();
-			// $this->httpData = $this->httpData [$url];
-			return $data;// [$url];
+			return $data; // [$url];
 		}
 	}
 
@@ -102,35 +103,30 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 				'Expect:'
 		] );
 		if (is_array ( $url )) {
-			$myvars = [ ];
+			$myVars = [ ];
 			foreach ( $url as $k => $u ) {
 				if (isset ( $vars [$k] )) {
-					if (is_array ( $vars [$k] )) {
-						if ($this->files) {
-							$myvars [$u] = array_merge ( $vars [$k], $this->files );
-						} else {
-							$myvars [$u] = http_build_query ( $vars [$k] );
-						}
-					} else {
-						if ($this->files) {
-							// 把字符串解析成数组
-							parse_str ( $vars [$k], $tmp );
-							$myvars [$u] = array_merge ( $tmp, $this->files );
-						} else {
-							$myvars [$u] = $vars [$k];
-						}
+					if (! is_array ( $vars [$k] )) {
+						parse_str ( $vars [$k], $tmp );
+						$vars [$k] = $tmp;
+					}
+					$myVars [$u] = $vars [$k];
+					if ($this->files) {
+						$myVars [$u] = array_merge ( $myVars [$u], $this->files );
 					}
 				}
 			}
 		} else {
+			if (! is_array ( $vars )) {
+				parse_str ( $vars, $tmp );
+				$vars = $tmp;
+			}
 			if ($this->files) {
 				$vars = array_merge ( $vars, $this->files );
 			}
-			$myvars = [
-					$url => $vars
-			];
+			$myVars [$url] = $vars;
 		}
-		$this->postData = $myvars;
+		$this->postData = $myVars;
 		return $this->getRequest ( $url );
 	}
 
@@ -151,17 +147,19 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 			$myvars = [ ];
 			foreach ( $url as $k => $u ) {
 				if (isset ( $vars [$k] )) {
-					if (is_array ( $vars [$k] )) {
-						$myvars [$u] = http_build_query ( $vars [$k] );
-					} else {
-						$myvars [$u] = $vars [$k];
+					if (! is_array ( $vars [$k] )) {
+						parse_str ( $vars [$k], $tmp );
+						$vars [$k] = $tmp;
 					}
+					$myvars [$u] = $vars [$k];
 				}
 			}
 		} else {
-			$myvars = [
-					$url => $vars
-			];
+			if (! is_array ( $vars )) {
+				parse_str ( $vars, $tmp );
+				$vars = $tmp;
+			}
+			$myvars [$url] = $vars;
 		}
 		$this->postData = $myvars;
 		return $this->getRequest ( $url );
@@ -200,12 +198,20 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		// 抓取跳转后的页面
 		curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, true );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt ( $ch, CURLOPT_ENCODING, 'gzip' );
+		curl_setopt ( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
 		curl_setopt ( $ch, CURLOPT_TIMEOUT, $this->timeout );
 		curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT_MS, $this->connectTimeout );
+		if (! is_null ( $this->authorizationToken )) { // 认证
+			curl_setopt ( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+			curl_setopt ( $ch, CURLOPT_USERPWD, $this->authorizationToken );
+		}
 		if ($matches ['scheme'] == 'https') {
 			curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, false );
 			curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
+		}
+		if (! empty ( $this->proxyHost ) && ! empty ( $this->proxyPort )) {
+			curl_setopt ( $ch, CURLOPT_PROXY, $this->proxyHost );
+			curl_setopt ( $ch, CURLOPT_PROXYPORT, $this->proxyPort );
 		}
 		if ($this->cookie) {
 			if (is_array ( $this->cookie )) {
@@ -226,6 +232,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		} else {
 			curl_setopt ( $ch, CURLOPT_USERAGENT, "PHP/" . PHP_VERSION . " HttpClient/1.2.5" );
 		}
+
 		foreach ( $this->option as $k => $v ) {
 			curl_setopt ( $ch, $k, $v );
 		}
@@ -242,6 +249,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		}
 		// 设置POST数据
 		if (isset ( $this->postData [$url] )) {
+			print_r ( $this->postData );
 			curl_setopt ( $ch, CURLOPT_POSTFIELDS, $this->postData [$url] );
 		}
 		return $ch;
