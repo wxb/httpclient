@@ -117,7 +117,7 @@ $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
 
-###get($url, $timeout = 10)
+###get请求
 
 用GET方法请求一个(或多个)页面，这样可以大大缩短API请求时间，并可以设置超时时间，单位：秒
 支持并发进程请求，并发请求的特点：比如需要同时请求100个页面，传统的是一个一个载入，假设每个页面需要0.1秒，那么100个页面就需要耗时10秒，而通过并发的方式，100个页面理论上也就是0.1秒就可以同时载入完成了，效率非常高。
@@ -141,7 +141,7 @@ $urls = array
 print_r($HttpClient->get($urls));
 ```
 
-###post($url, $data, $timeout = 30)
+###post请求
 
 用POST方法提交数据，支持多个页面同时请求
 // 请求单个页面
