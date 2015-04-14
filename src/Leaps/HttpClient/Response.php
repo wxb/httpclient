@@ -291,7 +291,7 @@ class Response
 	 * @param string $key
 	 * @return multitype:
 	 */
-	public function getCookies($key = null)
+	public function getCookies()
 	{
 		return $this->cookies;
 	}
@@ -325,7 +325,7 @@ class Response
 	 *
 	 * @return string
 	 */
-	public function getContent($isUtf8 = false)
+	public function getContent()
 	{
 		return $this->content;
 	}

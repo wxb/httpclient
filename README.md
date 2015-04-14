@@ -3,7 +3,7 @@
 ```json
 "require" : {
     "php" : ">=5.4.0",
-    "leaps/httpclient": "1.2.5"
+    "leaps/httpclient": "1.3.2"
 }
 ```
 ###基本使用
@@ -14,8 +14,8 @@
 <?php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
 也可以使用批量获取不通的网页内容：
@@ -24,8 +24,8 @@ echo $result->getBody();
 <?php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$result = $HttpClient->get(['http://www.baidu.com/','http://www.qq.com']);
-echo $result->getBody();
+$response = $HttpClient->get(['http://www.baidu.com/','http://www.qq.com']);
+echo $response->getContent();
 ```
 
 ###setAgent($agent = null)
@@ -34,8 +34,8 @@ echo $result->getBody();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $HttpClient->setAgent('test')；
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
 
@@ -47,8 +47,8 @@ echo $result->getBody();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $HttpClientt->setCookies('a=1;b=a;c[0]=1;c[1]=2');
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
 ###setProxy($host,$port)
@@ -59,8 +59,8 @@ echo $result->getBody();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $HttpClient->setProxy('username','password');
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
 ###setAuthorization($username,$password)
@@ -71,8 +71,8 @@ echo $result->getBody();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $HttpClient->setAuthorization('username','password');
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
 ###setReferer($referer)
@@ -83,11 +83,11 @@ echo $result->getBody();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $HttpClientt->setReferer('http://www.test.com/');
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
-###setIp($ip)
+###setHostIp($ip)
 
 设置请求的服务器的IP，这样可避免请求域名时DNS解析
 
@@ -95,9 +95,9 @@ echo $result->getBody();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 // 这样设置请求页面并不会通过DNS解析获取百度服务器的数据，而是直接请求127.0.0.1（即本机）的服务器的数据
-$HttpClientt->setIp('127.0.0.1');
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$HttpClientt->setHostIp('127.0.0.1');
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
 ###setMultiMaxNum($num)
@@ -114,8 +114,8 @@ HttpClient是支持并发请求的，详细可查看下面的get()方法。如�
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $HttpClientt->setOption(CURLOPT_TIMEOUT,30);
-$result = $HttpClient->get('http://www.baidu.com/');
-echo $result->getBody();
+$response = $HttpClient->get('http://www.baidu.com/');
+echo $response->getContent();
 ```
 
 ###get($url, $timeout = 10)
@@ -164,4 +164,54 @@ $vars = array
 	array('c'=>1,'d'=>1),	//对应 http://www.google.com/
 );
 print_r($HttpClient->post($urls,$vars));
+```
+
+###高级响应（Response）
+
+关于返回，正常情况下返回的是
+```php
+$HttpClient = new \Leaps\HttpClient\Adapter\Curl();
+$response = $HttpClient->get('http://www.baidu.com/');
+//获取响应的文档类型
+echo $response->getContentType();
+//获取响应的文档编码(当响应头和返回的HTML文档中没有编码信息时该方法获取不到正确的编码)
+echo $response->getCharSet();
+//获取响应的文档后缀名，(根据响应的文档类型来匹配后缀名，方便在下载文档后另存)
+echo $response->getContentSuffix();
+//获取响应的状态码（如200）
+echo $response->getStatusCode();
+//获取原始的响应头
+echo $response->getRawHeader();
+//获取解析过的响应头Key->value形式
+echo $response->getHeaders();
+//获取指定响应头
+echo $response->getHeader($name);
+//获取解析过的Cookie集合，数组形式
+echo $response->getCookies()();
+//获取指定的Cookie值
+echo $response->getCookie($name);
+//获取本次请求消耗的时间
+echo $response->getTime()
+//获取响应的内容
+echo $response->getContent();
+//获取HTML文档Head中的title和meta标签数组
+echo $response->getHeadTags();
+//是否是有效的HTTP响应码
+echo $response->isInvalid();
+//是否是成功的响应（响应码为200-300之间视为成功）
+echo $response->isSuccessful();
+//是否是重定向响应(300-400)
+echo $response->isRedirection();
+//是否是客户端错误的响应(400-500)
+echo $response->isClientError();
+//是否是服务端错误的响应（500-600）
+echo $response->isServerError();
+//是否是200
+echo $response->isOk();
+//是否是403
+echo $response->isForbidden();
+//是否是404
+echo $response->isNotFound();
+//是否是201,04,304
+echo $response->isEmpty();
 ```
