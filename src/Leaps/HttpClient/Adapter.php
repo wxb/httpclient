@@ -324,7 +324,6 @@ abstract class Adapter
 				] );
 			}
 		} else {
-
 			$reflection = new \ReflectionClass ( "\\Leaps\\HttpClient\\Response" );
 			$result = $reflection->newInstanceArgs ( [
 					$data [$url]

@@ -31,41 +31,49 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 	public function testCurlGet()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Curl ();
-		$http->get ( $this->testUrl );
+		$response = $http->get ( $this->testUrl );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 	public function testCurlGets()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Curl ();
-		$http->get ( $this->testUrls );
+		$response = $http->get ( $this->testUrls );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 	public function testFsockGet()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Fsock ();
-		$http->get ( $this->testUrl );
+		$response = $http->get ( $this->testUrl );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 	public function testFsockGets()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Fsock ();
-		$http->get ( $this->testUrls );
+		$response = $http->get ( $this->testUrls );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 	public function testCurlPost()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Curl ();
-		$http->post ( $this->testUrl, $this->postVar );
+		$response = $http->post ( $this->testUrl, $this->postVar );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 	public function testCurlPosts()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Curl ();
-		$http->post ( $this->testUrls, $this->postVars );
+		$response = $http->post ( $this->testUrls, $this->postVars );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 	public function testFsockPost()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Fsock ();
-		$http->get ( $this->testUrl, $this->postVar );
+		$response = $http->get ( $this->testUrl, $this->postVar );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 	public function testFsockPosts()
 	{
 		$http = new \Leaps\HttpClient\Adapter\Fsock ();
-		$http->get ( $this->testUrls, $this->postVars );
+		$response = $http->get ( $this->testUrls, $this->postVars );
+		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
 	}
 }

@@ -52,7 +52,12 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 	 */
 	public function _addFile($name, $fileName = '', $mimeType = '')
 	{
-		$this->files [$name] = "@" . realpath ( $fileName ) . ";filename=" . rawurlencode ( basename ( $fileName ) ) . ($mimeType ? $mimeType : ";type=" . MimeType::getMimeType ( $fileName ));
+		if (class_exists('\CURLFile')) {
+			$this->files [$name] = new \CURLFile ( realpath ( $fileName ), MimeType::getMimeType ( $fileName ), basename ( $fileName ) );
+			$this->setOption(CURLOPT_SAFE_UPLOAD, true);
+		} else {
+			$this->files [$name] = '@' . realpath($fileName);
+		}
 		return $this;
 	}
 
