@@ -1,7 +1,7 @@
 {
   "name" : "leaps/httpclient",
   "description" : "Leaps Httpclient library",
-  "version" : "1.3.2",
+  "version" : "1.3.3",
   "require" : {
     "php" : ">=5.4.0",
     "ext-curl" : "*"
@@ -12,19 +12,18 @@
     "homepage" : "http://www.l68.net/",
     "role" : "Founder and project lead"
   } ],
-  "keywords" : [ "leaps", "framework", "httpclient" ],
   "support" : {
     "issues" : "https://github.com/leaps/httpclient/issues?state=open",
     "wiki" : "https://github.com/leaps/httpclient/wiki",
     "source" : "https://github.com/tintsoft/leaps"
   },
+  "keywords" : [ "leaps", "framework", "httpclient" ],
   "autoload" : {
     "psr-4" : {
       "Leaps\\HttpClient\\" : "src/Leaps/HttpClient/"
     }
   },
-  "license" : "Apache2",
   "type" : "library",
+  "license" : "Apache2",
   "homepage" : "http://leaps.tintsoft.com/"
-
 }
