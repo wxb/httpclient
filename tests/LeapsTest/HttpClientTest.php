@@ -38,7 +38,11 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 	{
 		$http = new \Leaps\HttpClient\Adapter\Curl ();
 		$response = $http->get ( $this->testUrls );
-		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
+		if (is_array ( $response )) {
+			foreach ( $response as $r ) {
+				$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $r );
+			}
+		}
 	}
 	public function testFsockGet()
 	{
@@ -50,7 +54,11 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 	{
 		$http = new \Leaps\HttpClient\Adapter\Fsock ();
 		$response = $http->get ( $this->testUrls );
-		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
+		if (is_array ( $response )) {
+			foreach ( $response as $r ) {
+				$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $r );
+			}
+		}
 	}
 	public function testCurlPost()
 	{
@@ -62,7 +70,11 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 	{
 		$http = new \Leaps\HttpClient\Adapter\Curl ();
 		$response = $http->post ( $this->testUrls, $this->postVars );
-		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
+		if (is_array ( $response )) {
+			foreach ( $response as $r ) {
+				$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $r );
+			}
+		}
 	}
 	public function testFsockPost()
 	{
@@ -74,6 +86,10 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 	{
 		$http = new \Leaps\HttpClient\Adapter\Fsock ();
 		$response = $http->get ( $this->testUrls, $this->postVars );
-		$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $response );
+		if (is_array ( $response )) {
+			foreach ( $response as $r ) {
+				$this->assertInstanceOf ( '\Leaps\HttpClient\Response', $r );
+			}
+		}
 	}
 }
