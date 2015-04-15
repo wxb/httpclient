@@ -3,7 +3,7 @@
 ```json
 "require" : {
     "php" : ">=5.4.0",
-    "leaps/httpclient": "1.3.4"
+    "leaps/httpclient": "1.3.5"
 }
 ```
 ###基本使用
