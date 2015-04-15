@@ -172,9 +172,9 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		$uri = isset ( $matches ['path'] ) ? $matches ['path'] . (isset ( $matches ['query'] ) ? '?' . $matches ['query'] : '') : '/';
 		$connPort = isset ( $matches ['port'] ) ? intval ( $matches ['port'] ) : ($matches ['scheme'] == 'https' ? 443 : 80);
 		if ($matches ['scheme'] == 'https') {
-			$connHost = $this->_ip ? 'tls://' . $this->_ip : 'tls://' . $hostname;
+			$connHost = $this->hostIp ? 'tls://' . $this->hostIp : 'tls://' . $hostname;
 		} else {
-			$connHost = $this->_ip ? $this->_ip : $hostname;
+			$connHost = $this->hostIp ? $this->hostIp : $hostname;
 		}
 
 		$header = [
@@ -244,9 +244,9 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		if (! is_null ( $this->proxyHost ) && ! is_null ( $this->proxyPort )) {
 			$connHost = $this->proxyHost;
 			$connPort = $this->proxyPort;
-			$str = $this->_method . ' ' . $url . ' HTTP/1.1' . "\r\n";
+			$str = $this->method . ' ' . $url . ' HTTP/1.1' . "\r\n";
 		} else {
-			$str = $this->_method . ' ' . $uri . ' HTTP/1.1' . "\r\n";
+			$str = $this->method . ' ' . $uri . ' HTTP/1.1' . "\r\n";
 		}
 		foreach ( $header as $k => $v ) {
 			$str .= $k . ': ' . str_replace ( [
