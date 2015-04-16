@@ -52,11 +52,11 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 	 */
 	public function _addFile($name, $fileName = '', $mimeType = '')
 	{
-		if (class_exists('\CURLFile')) {
+		if (class_exists ( '\CURLFile' )) {
 			$this->files [$name] = new \CURLFile ( realpath ( $fileName ), MimeType::getMimeType ( $fileName ), basename ( $fileName ) );
-			$this->setOption(CURLOPT_SAFE_UPLOAD, true);
+			$this->setOption ( CURLOPT_SAFE_UPLOAD, true );
 		} else {
-			$this->files [$name] = '@' . realpath($fileName);
+			$this->files [$name] = '@' . realpath ( $fileName );
 		}
 		return $this;
 	}
@@ -284,6 +284,14 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		// 排队列表
 		$multiList = [ ];
 		foreach ( $urls as $url ) {
+			// 随机代理
+			if (! empty ( $this->httpProxys ) && $this->enableProxyRand == true) {
+				list ( $proxyServer, $proxyPort ) = array_rand ( $this->httpProxys, 1 );
+				$this->setHttpProxy ( $proxyServer, $proxyPort );
+			} else if (! empty ( $this->httpProxys ) && $this->enableProxyRand == flase) {
+				list ( $proxyServer, $proxyPort ) = array_shift ( $this->httpProxys);
+				$this->setHttpProxy ( $proxyServer, $proxyPort );
+			}
 			// 创建一个curl对象
 			$current = $this->_create ( $url );
 			if ($this->multiExecNum > 0 && $listNum >= $this->multiExecNum) {
