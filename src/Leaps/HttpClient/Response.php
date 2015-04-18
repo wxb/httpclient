@@ -95,8 +95,7 @@ class Response
 					list ( $key, $value ) = explode ( ': ', $item, 2 );
 					if ($key == 'Set-Cookie') { // Cookie 特殊处理
 						$this->headers [$key] [] = $value;
-						$cookie = $this->resolveCookie ( $value );
-						$this->cookies [$cookie ['name']] = $cookie ['value'];
+						$this->resolveCookie ( $value );
 					} else {
 						if ($key == 'Content-Type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
@@ -106,7 +105,7 @@ class Response
 								}
 							} else {
 								$this->contentType = $value;
-								if (preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
+								if (($this->getContentSuffix() == 'htm' || $this->getContentSuffix() == 'html') && preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
 									$this->charset = strtolower ( $match [1] );
 								}
 							}
@@ -367,11 +366,9 @@ class Response
 	private function resolveCookie($cookie)
 	{
 		if (($pos = strpos ( $cookie, ';' )) !== false) {
-			$item = [ ];
-			list ( $item ['name'], $item ['value'] ) = explode ( '=', substr ( $cookie, 0, $pos ), 2 );
-			return $item;
+			list ( $name, $value ) = explode ( '=', substr ( $cookie, 0, $pos ), 2 );
+			$this->cookies [$name] = $value;
 		}
-		return false;
 	}
 
 	/**
