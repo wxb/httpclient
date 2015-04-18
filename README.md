@@ -212,7 +212,7 @@ $urls = array
 // 返回已url为key的数组，注意，前后顺序有可能跟$urls中的不一样
 print_r($HttpClient->delete($urls));
 ```
-###上传
+###Upload上传
 
 用POST方法提交上传数据，不支持多个页面同时请求
 // 请求单个页面
@@ -220,13 +220,14 @@ print_r($HttpClient->delete($urls));
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->upload('http://localhost/upload', 'pic','/tmp/test.jpg',array('a'=>1,'b'=>1));
+$HttpClientt->upload('http://localhost/upload', 'pic','/tmp/test.jpg',['a'=>1,'b'=>1]);
 //或者	
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 $HttpClientt->addFile('pic','/tmp/test.jpg','image/jpg');
-$HttpClientt->post('http://localhost/upload', []);
+$HttpClientt->post('http://localhost/upload', ['a'=>1,'b'=>1]);
 ```
+
 ###高级响应（Response）
 
 ```php
