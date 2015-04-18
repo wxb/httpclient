@@ -189,6 +189,44 @@ $vars = array
 print_r($HttpClient->put($urls,$vars));
 ```
 
+###delete请求
+
+用DELETE方法请求一个(或多个)页面，这样可以大大缩短API请求时间，并可以设置超时时间，单位：秒
+支持并发进程请求，并发请求的特点：比如需要同时请求100个页面，传统的是一个一个载入，假设每个页面需要0.1秒，那么100个页面就需要耗时10秒，而通过并发的方式，100个页面理论上也就是0.1秒就可以同时载入完成了，效率非常高。
+
+单个URL直接返回请求的内容的对象，多个URL则返回以URL为key的数组
+
+```php
+//Create an instance
+$HttpClient = new \Leaps\HttpClient\Adapter\Curl();
+// 请求单个页面
+echo $HttpClient->delete('http://www.baidu.com/',3)->getContent();
+
+// 请求多个页面
+$urls = array
+(
+	'http://www.baidu.com/',
+	'http://www.google.com/',
+	'http://www.sina.com.cn/test.html',
+);
+// 返回已url为key的数组，注意，前后顺序有可能跟$urls中的不一样
+print_r($HttpClient->delete($urls));
+```
+###上传
+
+用POST方法提交上传数据，不支持多个页面同时请求
+// 请求单个页面
+
+```php
+//Create an instance
+$HttpClient = new \Leaps\HttpClient\Adapter\Curl();
+$HttpClientt->upload('http://localhost/upload', 'pic','/tmp/test.jpg',array('a'=>1,'b'=>1));
+//或者	
+//Create an instance
+$HttpClient = new \Leaps\HttpClient\Adapter\Curl();
+$HttpClientt->addFile('pic','/tmp/test.jpg','image/jpg');
+$HttpClientt->post('http://localhost/upload', []);
+```
 ###高级响应（Response）
 
 ```php
