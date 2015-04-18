@@ -34,6 +34,13 @@ class Response
 	protected $statusCode = 0;
 
 	/**
+	 * 原始响应内容
+	 *
+	 * @var string
+	 */
+	protected $rawContent;
+
+	/**
 	 * 响应内容
 	 *
 	 * @var string
@@ -46,6 +53,13 @@ class Response
 	 * @var string
 	 */
 	protected $contentType;
+
+	/**
+	 * 响应的内容格式
+	 *
+	 * @var string
+	 */
+	protected $contentFormat;
 
 	/**
 	 * 响应的内容编码
@@ -82,7 +96,7 @@ class Response
 			$this->time = $response ['time'];
 		}
 		if (isset ( $response ['data'] )) {
-			$this->content = $response ['data'];
+			$this->rawContent = $response ['data'];
 		}
 		if (isset ( $response ['rawHeader'] )) {
 			$this->rawHeaders = $response ['rawHeader'];
@@ -100,15 +114,16 @@ class Response
 						if ($key == 'Content-Type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
 								$this->contentType = substr ( $value, 0, $pos );
-								if (preg_match ( "/charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
+								if (preg_match ( "/charset=[^\\w]?([-\\w]+)/i", $this->rawContent, $match )) {
 									$this->charset = strtoupper ( $match [1] );
 								}
 							} else {
 								$this->contentType = $value;
-								if (($this->getContentSuffix() == 'htm' || $this->getContentSuffix() == 'html') && preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
+								if (($this->contentFormat == 'htm' || $this->contentFormat == 'html') && preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->rawContent, $match )) {
 									$this->charset = strtolower ( $match [1] );
 								}
 							}
+							$this->contentFormat = $this->getContentFormat ();
 						}
 						$this->headers [$key] = $value;
 					}
@@ -142,7 +157,7 @@ class Response
 	/**
 	 * 获取内容后缀
 	 */
-	public function getContentSuffix()
+	public function getContentFormat()
 	{
 		return MimeType::getSuffix ( $this->contentType );
 	}
@@ -234,11 +249,7 @@ class Response
 	 */
 	public function isEmpty()
 	{
-		return in_array ( $this->getStatusCode (), [
-				201,
-				204,
-				304
-		] );
+		return in_array ( $this->getStatusCode (), [ 201,204,304 ] );
 	}
 
 	/**
@@ -322,13 +333,24 @@ class Response
 	}
 
 	/**
+	 * 获取原始的响应内容
+	 */
+	public function getRawContent()
+	{
+		return $this->rawContent;
+	}
+
+	/**
 	 * 获取响应内容
 	 *
 	 * @return string
 	 */
-	public function getContent()
+	public function getContent($assoc = false)
 	{
-		return $this->content;
+		if ($this->contentFormat == 'json') {
+			return json_decode ( $this->rawContent, $assoc );
+		}
+		return $this->rawContent;
 	}
 
 	/**
@@ -378,6 +400,6 @@ class Response
 	 */
 	public function __toString()
 	{
-		return ( string ) $this->getContent ();
+		return ( string ) $this->getRawContent ();
 	}
 }
