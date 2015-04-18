@@ -241,7 +241,7 @@ echo $response->getContentType();
 echo $response->getCharSet();
 
 //获取响应的文档后缀名，(根据响应的文档类型来匹配后缀名，方便在下载文档后另存)
-echo $response->getContentSuffix();
+echo $response->getContentFormat();
 
 //获取响应的状态码（如200）
 echo $response->getStatusCode();
