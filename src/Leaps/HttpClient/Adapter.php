@@ -74,8 +74,6 @@ abstract class Adapter
 	protected $connectTimeout = 3000;
 	protected $proxyHost;
 	protected $proxyPort;
-	protected $httpProxys;
-	protected $enableProxyRand;
 	protected $authorizationToken;
 
 	/**
@@ -127,19 +125,6 @@ abstract class Adapter
 	{
 		$this->proxyHost = $host;
 		$this->proxyPort = $port;
-	}
-
-	/**
-	 * 批量设置代理服务器访问
-	 *
-	 * @param array $httpProxys [['host'=>'127.0.0.1','port'=>8080],['host'=>'127.0.0.1','port'=>1080]]
-	 * @param bool $isRand 是否随机使用
-	 * @return \Leaps\HttpClient\HttpClient
-	 */
-	public function setHttpProxys($httpProxys, $isRand = true)
-	{
-		$this->httpProxys = $httpProxys;
-		$this->enableProxyRand = $isRand;
 	}
 
 	/**

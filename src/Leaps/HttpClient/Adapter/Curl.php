@@ -81,9 +81,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 			$this->reset ();
 			return $data;
 		} else {
-			$data = $this->requestUrl ( [
-					$url
-			] );
+			$data = $this->requestUrl ( [ $url ] );
 			$this->reset ();
 			return $data; // [$url];
 		}
@@ -104,9 +102,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 	{
 		// POST模式
 		$this->setMethod ( 'POST' );
-		$this->setOption ( CURLOPT_HTTPHEADER, [
-				'Expect:'
-		] );
+		$this->setOption ( CURLOPT_HTTPHEADER, [ 'Expect:' ] );
 		if (is_array ( $url )) {
 			$myVars = [ ];
 			foreach ( $url as $k => $u ) {
@@ -145,9 +141,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 	public function putRequest($url, $vars)
 	{
 		$this->setMethod ( 'PUT' );
-		$this->setOption ( CURLOPT_HTTPHEADER, [
-				'Expect:'
-		] );
+		$this->setOption ( CURLOPT_HTTPHEADER, [ 'Expect:' ] );
 		if (is_array ( $url )) {
 			$myvars = [ ];
 			foreach ( $url as $k => $u ) {
@@ -284,14 +278,6 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		// 排队列表
 		$multiList = [ ];
 		foreach ( $urls as $url ) {
-			// 随机代理
-			if (! empty ( $this->httpProxys ) && $this->enableProxyRand == true) {
-				list ( $proxyServer, $proxyPort ) = array_rand ( $this->httpProxys, 1 );
-				$this->setHttpProxy ( $proxyServer, $proxyPort );
-			} else if (! empty ( $this->httpProxys ) && $this->enableProxyRand == flase) {
-				list ( $proxyServer, $proxyPort ) = array_shift ( $this->httpProxys);
-				$this->setHttpProxy ( $proxyServer, $proxyPort );
-			}
 			// 创建一个curl对象
 			$current = $this->_create ( $url );
 			if ($this->multiExecNum > 0 && $listNum >= $this->multiExecNum) {

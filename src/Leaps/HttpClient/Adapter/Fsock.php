@@ -302,14 +302,6 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				// 加入排队列表
 				$multiList [] = $url;
 			} else {
-				// 随机代理
-				if (! empty ( $this->httpProxys ) && $this->enableProxyRand == true) {
-					list ( $proxyServer, $proxyPort ) = array_rand ( $this->httpProxys, 1 );
-					$this->setHttpProxy ( $proxyServer, $proxyPort );
-				} else if (! empty ( $this->httpProxys ) && $this->enableProxyRand == flase) {
-					list ( $proxyServer, $proxyPort ) = array_shift ( $this->httpProxys );
-					$this->setHttpProxy ( $proxyServer, $proxyPort );
-				}
 				// 列队数控制
 				$listenerList [] = [
 						$url,
