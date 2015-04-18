@@ -129,7 +129,7 @@ echo $response->getContent();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 // 请求单个页面
-echo $HttpClient->get('http://www.baidu.com/',3)->data();
+echo $HttpClient->get('http://www.baidu.com/',3)->getContent();
 
 // 请求多个页面
 $urls = array
