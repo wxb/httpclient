@@ -165,6 +165,29 @@ $vars = array
 );
 print_r($HttpClient->post($urls,$vars));
 ```
+###put请求
+
+用PUt方法提交数据，支持多个页面同时请求
+// 请求单个页面
+
+```php
+//Create an instance
+$HttpClient = new \Leaps\HttpClient\Adapter\Curl();
+$HttpClientt->put('http://www.baidu.com/',array('a'=>1,'b'=>1));
+	
+// 请求多个页面
+$urls = array
+(
+	'http://www.baidu.com/',
+	'http://www.google.com/',
+);
+$vars = array
+(
+	array('a'=>1,'b'=>1),	//对应 http://www.baidu.com/
+	array('c'=>1,'d'=>1),	//对应 http://www.google.com/
+);
+print_r($HttpClient->put($urls,$vars));
+```
 
 ###高级响应（Response）
 
