@@ -214,8 +214,7 @@ print_r($HttpClient->delete($urls));
 ```
 ###Upload上传
 
-用POST方法提交上传数据，不支持多个页面同时请求
-// 请求单个页面
+用POST方法提交上传数据，不支持多个页面同时请求.
 
 ```php
 //Create an instance
