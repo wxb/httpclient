@@ -107,16 +107,17 @@ class Response
 						if ($key == 'Content-Type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
 								$this->contentType = substr ( $value, 0, $pos );
+								$this->contentFormat = $this->getContentFormat ();
 								if (preg_match ( "/charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
 									$this->charset = strtoupper ( $match [1] );
 								}
 							} else {
 								$this->contentType = $value;
+								$this->contentFormat = $this->getContentFormat ();
 								if (($this->contentFormat == 'htm' || $this->contentFormat == 'html') && preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
 									$this->charset = strtolower ( $match [1] );
 								}
 							}
-							$this->contentFormat = $this->getContentFormat ();
 						}
 						$this->headers [$key] = $value;
 					}
