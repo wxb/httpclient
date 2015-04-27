@@ -47,7 +47,8 @@ echo $response->getContent();
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->setCookies('a=1;b=a;c[0]=1;c[1]=2');
+//$HttpClientt->setCookie(['a'=>'3']);
+$HttpClientt->setCookie('a=1;b=a;c[0]=1;c[1]=2');
 $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
