@@ -180,6 +180,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		$header = [
 				'Host' => $hostname,
 				'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+				'Accept-Encoding'=>'gzip',
 				'Connection' => 'Close'
 		];
 		if (! is_null ( $this->authorizationToken )) { // 认证
