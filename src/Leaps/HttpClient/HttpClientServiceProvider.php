@@ -12,7 +12,7 @@ namespace Leaps\HttpClient;
 
 use Illuminate\Support\ServiceProvider;
 
-class HttpClientServiceProvider
+class HttpClientServiceProvider extends ServiceProvider
 {
 	/**
 	 * Register the service provider.
@@ -23,12 +23,7 @@ class HttpClientServiceProvider
 	{
 		$this->app ['httpclient'] = $this->app->share ( function ($app)
 		{
-			if (function_exists ( "curl_init" )) {
-				$className = "\\Leaps\\HttpClient\\Adapter\\Curl";
-			} else {
-				$className = "\\Leaps\\HttpClient\\Adapter\\Fsock";
-			}
-			return $className ();
+			return new Client();
 		} );
 	}
 }
