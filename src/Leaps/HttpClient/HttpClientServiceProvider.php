@@ -12,7 +12,7 @@ namespace Leaps\HttpClient;
 
 use Illuminate\Support\ServiceProvider;
 
-class HttpClientServiceProvider
+class HttpClientServiceProvider extends ServiceProvider
 {
 	/**
 	 * Register the service provider.
