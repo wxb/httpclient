@@ -47,8 +47,8 @@ echo $response->getContent();
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-//$HttpClientt->setCookie(['a'=>'3']);
-$HttpClientt->setCookie('a=1;b=a;c[0]=1;c[1]=2');
+//$HttpClient->setCookie(['a'=>'3']);
+$HttpClient->setCookie('a=1;b=a;c[0]=1;c[1]=2');
 $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
@@ -78,7 +78,7 @@ echo $response->getContent();
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->setReferer('http://www.test.com/');
+$HttpClient->setReferer('http://www.test.com/');
 $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
@@ -89,7 +89,7 @@ echo $response->getContent();
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
 // 这样设置请求页面并不会通过DNS解析获取百度服务器的数据，而是直接请求127.0.0.1（即本机）的服务器的数据
-$HttpClientt->setHostIp('127.0.0.1');
+$HttpClient->setHostIp('127.0.0.1');
 $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
@@ -102,7 +102,7 @@ HttpClient是支持并发请求的，详细可查看下面的get()方法。如�
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->setMultiMaxNum(100);
+$HttpClient->setMultiMaxNum(100);
 $response = $HttpClient->get(['http://www.baidu.com/']);
 echo $response->getContent();
 ```
@@ -114,7 +114,7 @@ echo $response->getContent();
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->setOption(CURLOPT_TIMEOUT,30);
+$HttpClient->setOption(CURLOPT_TIMEOUT,30);
 $response = $HttpClient->get('http://www.baidu.com/');
 echo $response->getContent();
 ```
@@ -135,9 +135,9 @@ echo $HttpClient->get('http://www.baidu.com/',3)->getContent();
 // 请求多个页面
 $urls = array
 (
-	'http://www.baidu.com/',
-	'http://www.google.com/',
-	'http://www.sina.com.cn/test.html',
+    'http://www.baidu.com/',
+    'http://www.google.com/',
+    'http://www.sina.com.cn/test.html',
 );
 // 返回已url为key的数组，注意，前后顺序有可能跟$urls中的不一样
 print_r($HttpClient->get($urls));
@@ -151,18 +151,18 @@ print_r($HttpClient->get($urls));
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->post('http://www.baidu.com/',array('a'=>1,'b'=>1));
-	
+$HttpClient->post('http://www.baidu.com/',array('a'=>1,'b'=>1));
+    
 // 请求多个页面
 $urls = array
 (
-	'http://www.baidu.com/',
-	'http://www.google.com/',
+    'http://www.baidu.com/',
+    'http://www.google.com/',
 );
 $vars = array
 (
-	array('a'=>1,'b'=>1),	//对应 http://www.baidu.com/
-	array('c'=>1,'d'=>1),	//对应 http://www.google.com/
+    array('a'=>1,'b'=>1),   //对应 http://www.baidu.com/
+    array('c'=>1,'d'=>1),   //对应 http://www.google.com/
 );
 print_r($HttpClient->post($urls,$vars));
 ```
@@ -174,18 +174,18 @@ print_r($HttpClient->post($urls,$vars));
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->put('http://www.baidu.com/',array('a'=>1,'b'=>1));
-	
+$HttpClient->put('http://www.baidu.com/',array('a'=>1,'b'=>1));
+    
 // 请求多个页面
 $urls = array
 (
-	'http://www.baidu.com/',
-	'http://www.google.com/',
+    'http://www.baidu.com/',
+    'http://www.google.com/',
 );
 $vars = array
 (
-	array('a'=>1,'b'=>1),	//对应 http://www.baidu.com/
-	array('c'=>1,'d'=>1),	//对应 http://www.google.com/
+    array('a'=>1,'b'=>1),   //对应 http://www.baidu.com/
+    array('c'=>1,'d'=>1),   //对应 http://www.google.com/
 );
 print_r($HttpClient->put($urls,$vars));
 ```
@@ -206,9 +206,9 @@ echo $HttpClient->delete('http://www.baidu.com/',3)->getContent();
 // 请求多个页面
 $urls = array
 (
-	'http://www.baidu.com/',
-	'http://www.google.com/',
-	'http://www.sina.com.cn/test.html',
+    'http://www.baidu.com/',
+    'http://www.google.com/',
+    'http://www.sina.com.cn/test.html',
 );
 // 返回已url为key的数组，注意，前后顺序有可能跟$urls中的不一样
 print_r($HttpClient->delete($urls));
@@ -220,12 +220,12 @@ print_r($HttpClient->delete($urls));
 ```php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->upload('http://localhost/upload', 'pic','/tmp/test.jpg',['a'=>1,'b'=>1]);
-//或者	
+$HttpClient->upload('http://localhost/upload', 'pic','/tmp/test.jpg',['a'=>1,'b'=>1]);
+//或者    
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$HttpClientt->addFile('pic','/tmp/test.jpg','image/jpg');
-$HttpClientt->post('http://localhost/upload', ['a'=>1,'b'=>1]);
+$HttpClient->addFile('pic','/tmp/test.jpg','image/jpg');
+$HttpClient->post('http://localhost/upload', ['a'=>1,'b'=>1]);
 ```
 
 ###高级响应（Response）
