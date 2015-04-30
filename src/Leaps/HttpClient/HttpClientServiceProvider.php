@@ -23,7 +23,12 @@ class HttpClientServiceProvider extends ServiceProvider
 	{
 		$this->app ['httpclient'] = $this->app->share ( function ($app)
 		{
-			return new Client();
+			if (function_exists ( "curl_init" )) {
+				$className = "\\Leaps\\HttpClient\\Adapter\\Curl";
+			} else {
+				$className = "\\Leaps\\HttpClient\\Adapter\\Fsock";
+			}
+			return new $className ();
 		} );
 	}
 }
