@@ -28,7 +28,7 @@ class HttpClientServiceProvider extends ServiceProvider
 			} else {
 				$className = "\\Leaps\\HttpClient\\Adapter\\Fsock";
 			}
-			return $className ();
+			return new $className ();
 		} );
 	}
 }
