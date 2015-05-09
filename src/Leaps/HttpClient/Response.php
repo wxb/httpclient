@@ -409,6 +409,6 @@ class Response
 		if($this->getContentFormat() == 'json'){
 			return json_decode($this->content)
 		}
-		return new stdClass();
+		return new \stdClass();
 	}
 }
