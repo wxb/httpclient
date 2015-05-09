@@ -344,7 +344,7 @@ class Response
 	public function getContentAsArray()
 	{
 		if($this->getContentFormat() == 'json'){
-			return json_decode($this->content,true)
+			return json_decode($this->content,true);
 		}
 		return [];
 	}
@@ -357,7 +357,7 @@ class Response
 	public function getContentAsObject()
 	{
 		if($this->getContentFormat() == 'json'){
-			return json_decode($this->content)
+			return json_decode($this->content);
 		}
 		return new \stdClass();
 	}
