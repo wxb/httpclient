@@ -391,7 +391,7 @@ class Response
 	 *
 	 * @return string
 	 */
-	public function toArray()
+	public function getArray()
 	{
 		if($this->getContentFormat() == 'json'){
 			return json_decode($this->content,true)
@@ -404,7 +404,7 @@ class Response
 	 *
 	 * @return string
 	 */
-	public function toObject()
+	public function getObject()
 	{
 		if($this->getContentFormat() == 'json'){
 			return json_decode($this->content)
