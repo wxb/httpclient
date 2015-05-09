@@ -337,6 +337,32 @@ class Response
 	}
 
 	/**
+	 * 魔术方法，输出数组
+	 *
+	 * @return string
+	 */
+	public function getContentAsArray()
+	{
+		if($this->getContentFormat() == 'json'){
+			return json_decode($this->content,true)
+		}
+		return [];
+	}
+
+	/**
+	 * 魔术方法，输出数组
+	 *
+	 * @return string
+	 */
+	public function getContentAsObject()
+	{
+		if($this->getContentFormat() == 'json'){
+			return json_decode($this->content)
+		}
+		return new \stdClass();
+	}
+
+	/**
 	 * 提取所有的 Head 标签返回一个数组
 	 */
 	public function getHeadTags()
@@ -386,29 +412,5 @@ class Response
 		return ( string ) $this->getContent ();
 	}
 
-	/**
-	 * 魔术方法，输出数组
-	 *
-	 * @return string
-	 */
-	public function getArray()
-	{
-		if($this->getContentFormat() == 'json'){
-			return json_decode($this->content,true)
-		}
-		return [];
-	}
-
-	/**
-	 * 魔术方法，输出数组
-	 *
-	 * @return string
-	 */
-	public function getObject()
-	{
-		if($this->getContentFormat() == 'json'){
-			return json_decode($this->content)
-		}
-		return new \stdClass();
-	}
+	
 }
