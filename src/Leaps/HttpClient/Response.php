@@ -331,7 +331,7 @@ class Response
 	 *
 	 * @return string
 	 */
-	public function getContent($assoc = false)
+	public function getContent()
 	{
 		return $this->content;
 	}
@@ -384,5 +384,31 @@ class Response
 	public function __toString()
 	{
 		return ( string ) $this->getContent ();
+	}
+
+	/**
+	 * 魔术方法，输出数组
+	 *
+	 * @return string
+	 */
+	public function toArray()
+	{
+		if($this->getContentFormat() == 'json'){
+			return json_decode($this->content,true)
+		}
+		return [];
+	}
+
+	/**
+	 * 魔术方法，输出数组
+	 *
+	 * @return string
+	 */
+	public function toObject()
+	{
+		if($this->getContentFormat() == 'json'){
+			return json_decode($this->content)
+		}
+		return new stdClass();
 	}
 }
