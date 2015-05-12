@@ -248,8 +248,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		}
 		// 设置POST数据
 		if (isset ( $this->postData [$url] )) {
-			print_r ( $this->postData );
-			curl_setopt ( $ch, CURLOPT_POSTFIELDS, $this->postData [$url] );
+			curl_setopt ( $ch, CURLOPT_POSTFIELDS,  is_array ( $this->postData [$url] ) ? http_build_query ( $this->postData [$url] ) : $this->postData [$url] );
 		}
 		return $ch;
 	}
