@@ -290,6 +290,18 @@ class Response
 		}
 		return false;
 	}
+	
+	/**
+	 * 获取服务器类型
+	 */
+	public function getServer()
+	{
+		if (isset ( $this->headers ['Server'] )) {
+			return $this->headers ['Server'];
+		} else {
+			return 'Unknown';
+		}
+	}
 
 	/**
 	 * 获取Cookie集合
