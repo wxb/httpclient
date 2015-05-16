@@ -17,63 +17,63 @@ class Response
 	 *
 	 * @var string
 	 */
-	protected $rawHeaders;
+	private $rawHeaders;
 
 	/**
 	 * 解析后的Header集合
 	 *
 	 * @var array
 	 */
-	protected $headers = [ ];
+	private $headers = [ ];
 
 	/**
 	 * 响应状态码
 	 *
 	 * @var int
 	 */
-	protected $statusCode = 0;
+	private $statusCode = 0;
 
 	/**
 	 * 响应内容
 	 *
 	 * @var string
 	 */
-	protected $content;
+	private $content;
 
 	/**
 	 * 响应的内容类型
 	 *
 	 * @var string
 	 */
-	protected $contentType;
+	private $contentType;
 
 	/**
 	 * 响应的内容格式
 	 *
 	 * @var string
 	 */
-	protected $contentFormat;
+	private $contentFormat;
 
 	/**
 	 * 响应的内容编码
 	 *
 	 * @var string
 	 */
-	protected $charset;
+	private $charset;
 
 	/**
 	 * Cookie集合
 	 *
 	 * @var array
 	 */
-	protected $cookies = [ ];
+	private $cookies = [ ];
 
 	/**
 	 * 使用时间单位秒
 	 *
 	 * @var float
 	 */
-	protected $time = 0;
+	private $time = 0;
 
 	/**
 	 * 构造方法
@@ -106,17 +106,9 @@ class Response
 					} else {
 						if ($key == 'Content-Type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
-								$this->contentType = substr ( $value, 0, $pos );
-								$this->contentFormat = $this->getContentFormat ();
-								if (preg_match ( "/charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
-									$this->charset = strtoupper ( $match [1] );
-								}
+								$this->contentType = substr ( $value, 0, $pos ); // 大部分情况下出现在GBK的网页中。。
 							} else {
 								$this->contentType = $value;
-								$this->contentFormat = $this->getContentFormat ();
-								if (($this->contentFormat == 'htm' || $this->contentFormat == 'html') && preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
-									$this->charset = strtolower ( $match [1] );
-								}
 							}
 						}
 						$this->headers [$key] = $value;
@@ -145,6 +137,16 @@ class Response
 	 */
 	public function getCharSet()
 	{
+		if (! $this->charset) {
+			// 应该判断内容是否是文本类型
+			if (strpos ( $this->contentType, 'text/' ) !== false) {
+				if (($this->getContentFormat () == 'htm' || $this->getContentFormat () == 'html') && preg_match ( "/<meta.+?charset=[^\\w]?([-\\w]+)/i", $this->content, $match )) {
+					$this->charset = strtoupper ( $match [1] );
+				} else { // 检测中文常用编码
+					$this->charset = strtoupper ( mb_detect_encoding ( $this->content, [ 'ASCII','CP936','GB18030','UTF-8','BIG-5' ] ) );
+				}
+			}
+		}
 		return $this->charset;
 	}
 
@@ -153,7 +155,10 @@ class Response
 	 */
 	public function getContentFormat()
 	{
-		return MimeType::getSuffix ( $this->contentType );
+		if (! $this->contentFormat) {
+			$this->contentFormat = MimeType::getSuffix ( $this->contentType );
+		}
+		return $this->contentFormat;
 	}
 
 	/**
@@ -290,7 +295,7 @@ class Response
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 获取服务器类型
 	 */
@@ -355,10 +360,10 @@ class Response
 	 */
 	public function getContentAsArray()
 	{
-		if($this->getContentFormat() == 'json'){
-			return json_decode($this->content,true);
+		if ($this->getContentFormat () == 'json') {
+			return json_decode ( $this->content, true );
 		}
-		return [];
+		return [ ];
 	}
 
 	/**
@@ -368,10 +373,10 @@ class Response
 	 */
 	public function getContentAsObject()
 	{
-		if($this->getContentFormat() == 'json'){
-			return json_decode($this->content);
+		if ($this->getContentFormat () == 'json') {
+			return json_decode ( $this->content );
 		}
-		return new \stdClass();
+		return new \stdClass ();
 	}
 
 	/**
@@ -382,6 +387,9 @@ class Response
 		$result = [ ];
 		if (is_string ( $this->content ) && ! empty ( $this->content )) {
 			if (preg_match ( "/<head>(.*)<\/head>/si", $this->content, $head )) {
+				if ($this->getCharSet () != 'UTF-8') { // 转码
+					$head [1] = mb_convert_encoding ( $head [1], 'UTF-8', $this->getCharSet () );
+				}
 				// 解析title
 				if (preg_match ( '/<title>([^>]*)<\/title>/si', $head [1], $match )) {
 					$result ['title'] = trim ( strip_tags ( $match [1] ) );
@@ -395,6 +403,10 @@ class Response
 					for($i = 0; $i < $limiti; $i ++) {
 						$result ['metaTags'] [$names [$i]] = $values [$i];
 					}
+				}
+				if (isset ( $result ['metaTags'] ['keywords'] )) {//将关键词切成数组
+					$keywords = str_replace ( [ '，','|','、',' ' ], ',', $result ['metaTags'] ['keywords'] );
+					$result ['keywords'] = explode ( ',', $keywords );
 				}
 			}
 		}
@@ -423,6 +435,4 @@ class Response
 	{
 		return ( string ) $this->getContent ();
 	}
-
-	
 }

@@ -3,7 +3,7 @@
 ```json
 "require" : {
     "php" : ">=5.4.0",
-    "leaps/httpclient": "1.4.3"
+    "leaps/httpclient": "1.4.4"
 }
 ```
 如果您修改了leaps/httpclient的代码，我非常的欢迎您把您的修改提交给我，如果您的使用中遇到任何问题欢迎在右侧的issues提交给我，我将尽快修复，本项目的更新非常频繁，1.2和1.3除了响应类不兼容以外基本都兼容，如果您使用的是1.2版本想升级到1.3版本，只需要继续使用1.2的响应类即可。QQ交流群：136057107 [![QQ群：136057107](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=3cae2d38bed634a14863ffc38873d4f03fab2d3a54e2e43a7f8e4aaf7e3cdc0f)
