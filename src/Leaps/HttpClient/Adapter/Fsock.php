@@ -367,6 +367,11 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 					continue;
 				}
 			}
+			
+			if (strpos ( $header, 'Content-Encoding: gzip' )) {
+				$body = gzdecode ( $body );
+			}
+			
 			$rs = [
 					'code' => $code,
 					'data' => $body,
