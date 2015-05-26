@@ -340,9 +340,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				$code = 0;
 			}
 			if (strpos ( $header, 'Transfer-Encoding: chunked' )) {
-				$body = explode ( "\r\n", $body );
-				$body = array_slice ( $body, 1, - 1 );
-				$body = implode ( '', $body );
+				 $body =preg_replace_callback ( '/(?:(?:\r\n|\n)|^)([0-9A-F]+)(?:\r\n|\n){1,2}(.*?)' . '((?:\r\n|\n)(?:[0-9A-F]+(?:\r\n|\n))|$)/si', create_function ( '$matches', 'return hexdec($matches[1]) == strlen($matches[2]) ? $matches[2] : $matches[0];' ), $body );
 			}
 			if (preg_match ( '#Location(?:[ ]*):([^\r]+)\r\n#Uis', $header, $m )) {
 				if (isset ( $redirectList [$doneUrl] ) && count ( $redirectList [$doneUrl] ) >= 10) {
