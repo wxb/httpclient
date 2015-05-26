@@ -256,15 +256,15 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 			], '', $v ) . "\r\n";
 		}
 		$str .= "\r\n";
-		if ($this->timeout > ini_get ( 'max_execution_time' ))
+		if ($this->timeout > ini_get ( 'max_execution_time' )){
 			@set_time_limit ( $this->timeout );
-		$ch = @fsockopen ( $connHost, $connPort, $errno, $errstr, $this->_timeout );
+		}
+		$ch = @fsockopen ( $connHost, $connPort, $errno, $errstr, $this->timeout );
 		if (! $ch) {
 			// \Leaps\Debug::error ( "$errstr ($errno)" );
 			return false;
 		} else {
 			stream_set_blocking ( $ch, TRUE );
-			// stream_set_timeout ( $ch, $this->timeout );
 			fwrite ( $ch, $str );
 			if ($vars) {
 				// 追加POST数据
