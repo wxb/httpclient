@@ -62,9 +62,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 			$data = $this->requestUrl ( $url );
 			$this->reset ();
 		} else {
-			$data = $this->requestUrl ( [
-					$url
-			] );
+			$data = $this->requestUrl ( [ $url ] );
 			$this->reset ();
 		}
 		return $data;
@@ -104,9 +102,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				}
 			}
 		} else {
-			$myVars = [
-					$url => $vars
-			];
+			$myVars = [ $url => $vars ];
 		}
 		$this->postData = $myVars;
 		return $this->getRequest ( $url );
@@ -136,9 +132,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				}
 			}
 		} else {
-			$myvars = [
-					$url => $vars
-			];
+			$myvars = [ $url => $vars ];
 		}
 		$this->postData = $myvars;
 
@@ -177,12 +171,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 			$connHost = $this->hostIp ? $this->hostIp : $hostname;
 		}
 
-		$header = [
-				'Host' => $hostname,
-				'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-				'Accept-Encoding'=>'gzip, deflate',
-				'Connection' => 'Close'
-		];
+		$header = [ 'Host' => $hostname,'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Accept-Encoding' => 'gzip, deflate','Connection' => 'Close' ];
 		if (! is_null ( $this->authorizationToken )) { // 认证
 			$header ['Authorization'] = $this->authorizationToken;
 		}
@@ -192,7 +181,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 		} elseif (array_key_exists ( 'HTTP_USER_AGENT', $_SERVER )) {
 			$header ['User-Agent'] = $_SERVER ['HTTP_USER_AGENT'];
 		} else {
-			$header ['User-Agent'] = "PHP/" . PHP_VERSION . " HttpClient/1.0";
+			$header ['User-Agent'] = "PHP/" . PHP_VERSION . " HttpClient/1.4.7";
 		}
 		if ($this->referer) {
 			$header ['Referer'] = $this->referer;
@@ -250,13 +239,10 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 			$str = $this->method . ' ' . $uri . ' HTTP/1.1' . "\r\n";
 		}
 		foreach ( $header as $k => $v ) {
-			$str .= $k . ': ' . str_replace ( [
-					"\r",
-					"\n"
-			], '', $v ) . "\r\n";
+			$str .= $k . ': ' . str_replace ( [ "\r","\n" ], '', $v ) . "\r\n";
 		}
 		$str .= "\r\n";
-		if ($this->timeout > ini_get ( 'max_execution_time' )){
+		if ($this->timeout > ini_get ( 'max_execution_time' )) {
 			@set_time_limit ( $this->timeout );
 		}
 		$ch = @fsockopen ( $connHost, $connPort, $errno, $errstr, $this->timeout );
@@ -304,10 +290,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				$multiList [] = $url;
 			} else {
 				// 列队数控制
-				$listenerList [] = [
-						$url,
-						$this->_create ( $url )
-				];
+				$listenerList [] = [ $url,$this->_create ( $url ) ];
 				$listNum ++;
 			}
 			$result [$url] = null;
@@ -340,7 +323,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				$code = 0;
 			}
 			if (strpos ( $header, 'Transfer-Encoding: chunked' )) {
-				 $body =preg_replace_callback ( '/(?:(?:\r\n|\n)|^)([0-9A-F]+)(?:\r\n|\n){1,2}(.*?)' . '((?:\r\n|\n)(?:[0-9A-F]+(?:\r\n|\n))|$)/si', create_function ( '$matches', 'return hexdec($matches[1]) == strlen($matches[2]) ? $matches[2] : $matches[0];' ), $body );
+				$body = preg_replace_callback ( '/(?:(?:\r\n|\n)|^)([0-9A-F]+)(?:\r\n|\n){1,2}(.*?)' . '((?:\r\n|\n)(?:[0-9A-F]+(?:\r\n|\n))|$)/si', create_function ( '$matches', 'return hexdec($matches[1]) == strlen($matches[2]) ? $matches[2] : $matches[0];' ), $body );
 			}
 			if (preg_match ( '#Location(?:[ ]*):([^\r]+)\r\n#Uis', $header, $m )) {
 				if (isset ( $redirectList [$doneUrl] ) && count ( $redirectList [$doneUrl] ) >= 10) {
@@ -357,28 +340,19 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 						$oldCookie = $this->cookie;
 						$this->cookie = $m2 [1];
 					}
-					array_unshift ( $listenerList, [
-							$doneUrl,
-							$this->_create ( $newUrl )
-					] );
+					array_unshift ( $listenerList, [ $doneUrl,$this->_create ( $newUrl ) ] );
 					if (isset ( $oldCookie )) {
 						$this->cookie = $oldCookie;
 					}
 					continue;
 				}
 			}
-			
+
 			if (strpos ( $header, 'Content-Encoding: gzip' )) {
 				$body = gzdecode ( $body );
 			}
-			
-			$rs = [
-					'code' => $code,
-					'data' => $body,
-					'rawHeader' => $header,
-					'header' => $headerArr,
-					'time' => $time
-			];
+
+			$rs = [ 'code' => $code,'data' => $body,'rawHeader' => $header,'header' => $headerArr,'time' => $time ];
 			$this->httpData [$doneUrl] = $rs;
 			if ($rs ['code'] != 200) {
 				// \Leaps\Debug::error ( 'URL:' . $doneUrl . ' ERROR,TIME:' . $this->httpData [$doneUrl] ['time'] . ',CODE:' . $this->httpData [$doneUrl] ['code'] );
@@ -392,10 +366,7 @@ class Fsock extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapt
 				// 获取列队中的一条URL
 				$currentUrl = array_shift ( $multiList );
 				// 更新监听列队信息
-				$listenerList [] = [
-						$currentUrl,
-						$this->_create ( $currentUrl )
-				];
+				$listenerList [] = [ $currentUrl,$this->_create ( $currentUrl ) ];
 				// 更新列队数
 				$listNum ++;
 			}

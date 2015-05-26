@@ -248,7 +248,7 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 		}
 		// 设置POST数据
 		if (isset ( $this->postData [$url] )) {
-			curl_setopt ( $ch, CURLOPT_POSTFIELDS,  is_array ( $this->postData [$url] ) ? http_build_query ( $this->postData [$url] ) : $this->postData [$url] );
+			curl_setopt ( $ch, CURLOPT_POSTFIELDS, is_array ( $this->postData [$url] ) ? http_build_query ( $this->postData [$url] ) : $this->postData [$url] );
 		}
 		return $ch;
 	}
@@ -308,17 +308,17 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 					if ($listener === $done ['handle']) {
 						// 获取内容
 						$this->httpData [$doneUrl] = $this->getData ( curl_multi_getcontent ( $done ['handle'] ), $done ['handle'] );
-//判断有无跳转 在CURL自动跳转失败时有效
+						// 判断有无跳转 在CURL自动跳转失败时有效
 						if (preg_match ( '#Location(?:[ ]*):([^\r]+)\r\n#Uis', $this->httpData [$doneUrl] ['rawHeader'], $m )) {
-							if (isset ( $redirectList [$doneUrl] ) && count ( $redirectList [$doneUrl] ) >= 10) {//超过最大跳转次数
+							if (isset ( $redirectList [$doneUrl] ) && count ( $redirectList [$doneUrl] ) >= 10) { // 超过最大跳转次数
 								$result [$doneUrl] = false;
 							} else {
 								curl_close ( $done ['handle'] );
 								curl_multi_remove_handle ( $mh, $done ['handle'] );
 								$newUrl = trim ( $m [1] );
-								//跳转计数
+								// 跳转计数
 								$redirectList [$doneUrl] [] = $newUrl;
-								//把Cookie弄过去
+								// 把Cookie弄过去
 								if (preg_match ( '#Set-Cookie(?:[ ]*):([^\r+])\r\n#is', $this->httpData [$doneUrl] ['rawHeader'], $m2 )) {
 									// 把cookie传递过去
 									$oldCookie = $this->cookie;
