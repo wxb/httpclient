@@ -104,7 +104,7 @@ class Response
 						$this->headers [$key] [] = $value;
 						$this->resolveCookie ( $value );
 					} else {
-						if ($key == 'Content-Type') {
+						if ($key == 'Content-Type' || $key == 'Content-type') {
 							if (($pos = strpos ( $value, ';' )) !== false) {
 								$this->contentType = substr ( $value, 0, $pos ); // 大部分情况下出现在GBK的网页中。。
 							} else {
