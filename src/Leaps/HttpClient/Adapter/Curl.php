@@ -316,6 +316,9 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 								curl_close ( $done ['handle'] );
 								curl_multi_remove_handle ( $mh, $done ['handle'] );
 								$newUrl = trim ( $m [1] );
+								if (strpos ( $newUrl, "://" ) == false) {
+									$newUrl = $doneUrl . $newUrl;
+								}
 								// 跳转计数
 								$redirectList [$doneUrl] [] = $newUrl;
 								// 把Cookie弄过去
