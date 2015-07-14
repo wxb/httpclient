@@ -39,6 +39,7 @@ abstract class Adapter
 	 * @var string
 	 */
 	protected $cookie;
+	protected $cookieJar = false;
 	protected $files = [ ];
 	protected $hostIp;
 	protected $header = [ ];
@@ -169,6 +170,17 @@ abstract class Adapter
 	public function setCookie($cookie)
 	{
 		$this->cookie = $cookie;
+	}
+	
+	/**
+	 * 设置CookieJar
+	 *
+	 * @param string $cookieJar
+	 * @return \Leaps\HttpClient\Adapter
+	 */
+	public function setCookieJar($cookieJar)
+	{
+		$this->cookieJar = $cookieJar;
 	}
 
 	/**
