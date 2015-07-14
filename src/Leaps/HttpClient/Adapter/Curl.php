@@ -212,13 +212,16 @@ class Curl extends \Leaps\HttpClient\Adapter implements \Leaps\HttpClient\Adapte
 			curl_setopt ( $ch, CURLOPT_PROXY, $this->proxyHost );
 			curl_setopt ( $ch, CURLOPT_PROXYPORT, $this->proxyPort );
 		}
-		if ($this->cookie) {
+		if($this->cookieJar != false && is_string($this->cookieJar)){
+			curl_setopt ( $ch, CURLOPT_COOKIEJAR, $this->cookieJar );
+		} else if($this->cookie){
 			if (is_array ( $this->cookie )) {
 				curl_setopt ( $ch, CURLOPT_COOKIE, http_build_query ( $this->cookie, '', ';' ) );
 			} else {
 				curl_setopt ( $ch, CURLOPT_COOKIE, $this->cookie );
 			}
 		}
+
 		if ($this->referer) {
 			curl_setopt ( $ch, CURLOPT_REFERER, $this->referer );
 		} else {
