@@ -15,8 +15,10 @@
 <?php
 //Create an instance
 $HttpClient = new \Leaps\HttpClient\Adapter\Curl();
-$response = $HttpClient->get('http://www.baidu.com/');
-echo $response->getContent();
+$responses = $HttpClient->get('http://www.baidu.com/');
+foreach($responses as $response){
+    echo $response->getContent();
+}
 ```
 
 也可以使用批量获取不同的网页内容：
